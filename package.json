@@ -1,0 +1,13 @@
+{
+  "name": "doma-designs-marketplace",
+  "version": "1.0.0",
+  "description": "Showcase and sell web designs linked to Google Sheets and Telegram Bot",
+  "main": "index.html",
+  "scripts": {
+    "start": "serve ."
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "serve": "^14.2.0"
+  }
+}
