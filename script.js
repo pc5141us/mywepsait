@@ -17,13 +17,15 @@ async function fetchAndRenderProjects() {
         let projects = [];
         
         if (SHEET_API_URL.includes("YOUR_SCRIPT_ID")) {
-            console.warn("Please update SHEET_API_URL with your actual script link.");
-            // بيانات تجريبية في حالة عدم وجود رابط
+            // إذا كان المستخدم لم يضع الرابط بعد، نظهر له بيانات توضيحية ليرى كيف سيبدو الموقع
             projects = [
-                { id: 1, title: "مثال لموقع (يرجى ربط الـ API)", description: "عندما تربط الموقع بـ Google Sheets، ستظهر مواقعك هنا تلقائياً.", price: "0$", thumbnail: "https://images.unsplash.com/photo-1460925895917-afdab827c52f", previewUrl: "#" }
+                { id: 1, title: "نموذج: يرجى إضافة رابط الـ API", description: "عند إضافة رابط الـ Web App في ملف script.js، ستظهر مشاريعك الحقيقية هنا مباشرة.", price: "50$", thumbnail: "https://images.unsplash.com/photo-1460925895917-afdab827c52f", previewUrl: "#" },
+                { id: 2, title: "تصميم متجر إلكتروني", description: "مثال لوصف المشروع الذي ستضيفه من خلال بوت التليجرام الخاص بك.", price: "120$", thumbnail: "https://images.unsplash.com/photo-1519389950473-47ba0277781c", previewUrl: "#" }
             ];
+            console.warn("تنبيه: أنت تستخدم الرابط التجريبي. يرجى استبدال YOUR_SCRIPT_ID برابطك من Google Apps Script ليعمل الموقع بشكل حقيقي.");
         } else {
             const response = await fetch(SHEET_API_URL);
+            if (!response.ok) throw new Error("فشل الاتصال بجدول البيانات");
             projects = await response.json();
         }
 
