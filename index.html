@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doma Designs | معرض القوالب والخدمات المواقع</title>
+    <meta name="description" content="استعرض أفضل تصاميم المواقع، جربها بنفسك قبل الشراء باسعار منافسة.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Doma<span>Designs</span></div>
+            <ul class="nav-links">
+                <li><a href="#home">الرئيسية</a></li>
+                <li><a href="#showcase">المشاريع</a></li>
+                <li><a href="#contact">اتصل بنا</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="home" class="hero" style="background-image: url('portfolio_showcase_hero_1776269674829.png');">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>عالمك الرقمي يبدأ من هنا</h1>
+            <p>تصفح أرقى تصاميم المواقع الجاهزة، اختبرها بنفسك، واحصل عليها فوراً بأسعار تنافسية.</p>
+            <a href="#showcase" class="cta-button">استعرض التصاميم</a>
+        </div>
+    </section>
+
+    <section id="showcase" class="showcase">
+        <h2 class="section-title">التصاميم المتاحة</h2>
+        <div class="project-grid" id="projectGrid">
+            <!-- سيتم إضافة المشاريع هنا تلقائياً من خلال ملف script.js -->
+        </div>
+    </section>
+
+    <!-- Preview Modal -->
+    <div id="previewModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>معاينة حية للموقع</h3>
+                <span class="close-btn" onclick="closePreview()">&times;</span>
+            </div>
+            <div class="iframe-container">
+                <iframe id="previewFrame" src="" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>حقوق النشر © 2026 Doma Designs. جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
