@@ -4,7 +4,8 @@
   "description": "Showcase and sell web designs linked to Google Sheets and Telegram Bot",
   "main": "index.html",
   "scripts": {
-    "start": "serve ."
+    "start": "serve .",
+    "build": "mkdir -p public && cp index.html style.css script.js vercel.json public/ || true"
   },
   "dependencies": {},
   "devDependencies": {
