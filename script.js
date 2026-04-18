@@ -73,19 +73,14 @@ function initScrollReveal() {
 }
 
 // Open Preview Modal
+// فتح المعاينة في نافذة جديدة مباشرة لتجنب حظر المواقع
 function openPreview(url) {
-    if (url === "#" || !url) return;
-    const modal = document.getElementById('previewModal');
-    const iframe = document.getElementById('previewFrame');
-    const loader = document.getElementById('iframeLoader');
-    const externalLink = document.getElementById('externalLink');
-    
-    loader.style.display = 'flex'; // إظهار مؤشر التحميل
-    iframe.src = url;
-    externalLink.href = url;
-    
-    modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
+    if (url === "#" || !url) {
+        alert("معذرة، لا يوجد رابط معاينة متاح لهذا العمل.");
+        return;
+    }
+    // فتح الرابط في نافذة جديدة
+    window.open(url, '_blank');
 }
 
 // Close Preview Modal
