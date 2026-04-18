@@ -7,7 +7,9 @@
     "start": "serve .",
     "build": "mkdir -p public && cp index.html style.css script.js vercel.json public/ || true"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@vercel/kv": "^1.0.1"
+  },
   "devDependencies": {
     "serve": "^14.2.0"
   }

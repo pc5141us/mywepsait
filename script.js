@@ -1,6 +1,5 @@
-// رابط الـ API الذي ستحصل عليه من Google Apps Script
-// بعد نشر السكربت كـ Web App، ضع الرابط هنا
-const SHEET_API_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
+// رابط جلب البيانات من Vercel API الداخلي
+const SHEET_API_URL = "/api/projects";
 
 // رابط التليجرام الخاص بك
 const telegramBotUrl = "https://t.me/DomaDesignsbot";
@@ -8,26 +7,11 @@ const telegramBotUrl = "https://t.me/DomaDesignsbot";
 // عرض المواقع في الصفحة
 async function fetchAndRenderProjects() {
     const projectGrid = document.getElementById('projectGrid');
-    
-    // إظهار رسالة تحميل بسيطة
-    projectGrid.innerHTML = '<div class="loader">جاري جلب المواقع...</div>';
+    projectGrid.innerHTML = '<div class="loader">جاري جلب القوالب...</div>';
 
     try {
-        // إذا كان هناك رابط حقيقي، سنستخدمه. وإذا لم يوجد، سنستخدم بيانات تجريبية مؤقتاً
-        let projects = [];
-        
-        if (SHEET_API_URL.includes("YOUR_SCRIPT_ID")) {
-            // إذا كان المستخدم لم يضع الرابط بعد، نظهر له بيانات توضيحية ليرى كيف سيبدو الموقع
-            projects = [
-                { id: 1, title: "نموذج: يرجى إضافة رابط الـ API", description: "عند إضافة رابط الـ Web App في ملف script.js، ستظهر مشاريعك الحقيقية هنا مباشرة.", price: "50$", thumbnail: "https://images.unsplash.com/photo-1460925895917-afdab827c52f", previewUrl: "#" },
-                { id: 2, title: "تصميم متجر إلكتروني", description: "مثال لوصف المشروع الذي ستضيفه من خلال بوت التليجرام الخاص بك.", price: "120$", thumbnail: "https://images.unsplash.com/photo-1519389950473-47ba0277781c", previewUrl: "#" }
-            ];
-            console.warn("تنبيه: أنت تستخدم الرابط التجريبي. يرجى استبدال YOUR_SCRIPT_ID برابطك من Google Apps Script ليعمل الموقع بشكل حقيقي.");
-        } else {
-            const response = await fetch(SHEET_API_URL);
-            if (!response.ok) throw new Error("فشل الاتصال بجدول البيانات");
-            projects = await response.json();
-        }
+        const response = await fetch(SHEET_API_URL);
+        const projects = await response.json();
 
         projectGrid.innerHTML = ''; // مسح رسالة التحميل
 
