@@ -74,10 +74,14 @@ function initScrollReveal() {
 
 // Open Preview Modal
 function openPreview(url) {
-    if (url === "#") return;
+    if (url === "#" || !url) return;
     const modal = document.getElementById('previewModal');
     const iframe = document.getElementById('previewFrame');
+    const externalLink = document.getElementById('externalLink');
+    
     iframe.src = url;
+    externalLink.href = url;
+    
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
 }

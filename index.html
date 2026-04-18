@@ -43,7 +43,10 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3>معاينة حية للموقع</h3>
-                <span class="close-btn" onclick="closePreview()">&times;</span>
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <a id="externalLink" href="#" target="_blank" class="btn" style="background: var(--primary); padding: 5px 15px; font-size: 0.8rem; border-radius: 8px; text-decoration: none; color: white;">فتح في نافذة جديدة ↗</a>
+                    <span class="close-btn" onclick="closePreview()">&times;</span>
+                </div>
             </div>
             <div class="iframe-container">
                 <iframe id="previewFrame" src="" frameborder="0"></iframe>
