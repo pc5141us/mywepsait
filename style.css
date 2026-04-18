@@ -251,43 +251,54 @@ nav {
     position: fixed;
     z-index: 2000;
     inset: 0;
-    background-color: rgba(0,0,0,0.9);
-    padding: 40px;
+    background-color: rgba(0,0,0,0.95);
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
 }
 
 .modal-content {
     background-color: var(--dark);
-    width: 90%;
-    height: 90%;
-    margin: auto;
-    border-radius: 30px;
+    width: 95%;
+    height: 95%;
+    border-radius: 20px;
     border: 1px solid var(--glass);
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
 .modal-header {
-    padding: 20px 30px;
+    padding: 15px 25px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background: #1e293b;
     border-bottom: 1px solid var(--glass);
 }
 
 .close-btn {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     cursor: pointer;
-    line-height: 1;
+    color: #94a3b8;
+    transition: 0.3s;
+}
+
+.close-btn:hover {
+    color: white;
 }
 
 .iframe-container {
     flex: 1;
+    position: relative;
+    background: white; /* خلفية بيضاء لضمان وضوح المواقع */
 }
 
 iframe {
     width: 100%;
     height: 100%;
+    border: none;
 }
 
 footer {

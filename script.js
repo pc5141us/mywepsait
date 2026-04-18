@@ -77,8 +77,10 @@ function openPreview(url) {
     if (url === "#" || !url) return;
     const modal = document.getElementById('previewModal');
     const iframe = document.getElementById('previewFrame');
+    const loader = document.getElementById('iframeLoader');
     const externalLink = document.getElementById('externalLink');
     
+    loader.style.display = 'flex'; // إظهار مؤشر التحميل
     iframe.src = url;
     externalLink.href = url;
     
