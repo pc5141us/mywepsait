@@ -6,20 +6,20 @@ function doGet(e) {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   var data = sheet.getDataRange().getValues();
   var result = [];
-  
+
   if (data.length > 1) {
     for (var i = 1; i < data.length; i++) {
-        result.push({
-          id: data[i][0],
-          title: data[i][1],
-          description: data[i][2],
-          price: data[i][3],
-          thumbnail: data[i][4],
-          previewUrl: data[i][5]
-        });
+      result.push({
+        id: data[i][0],
+        title: data[i][1],
+        description: data[i][2],
+        price: data[i][3],
+        thumbnail: data[i][4],
+        previewUrl: data[i][5]
+      });
     }
   }
-  
+
   return ContentService.createTextOutput(JSON.stringify(result))
     .setMimeType(ContentService.MimeType.JSON);
 }
@@ -27,13 +27,13 @@ function doGet(e) {
 // 2. معالجة الرسائل والضغط على الأزرار (POST)
 function doPost(e) {
   var update = JSON.parse(e.postData.contents);
-  
+
   // معالجة الضغط على أزرار الكيبورد أونلاين
   if (update.callback_query) {
     handleCallback(update.callback_query);
     return;
   }
-  
+
   // معالجة الرسائل النصية
   if (update.message) {
     handleMessage(update.message);
@@ -45,13 +45,19 @@ function handleMessage(msg) {
   var chatId = msg.chat.id;
   var text = msg.text || "";
   
-  if (text == "/start") {
+  if (text == "/start" || text == "🔄 تحديث القائمة") {
     sendMainKeyboard(chatId);
+  } else if (text == "🌐 عرض الموقع") {
+    sendMessage(chatId, "🔗 يمكنك زيارة موقعنا من هنا:\n" + "https://your-vercel-domain.com");
+  } else if (text == "➕ إضافة موقع جديد") {
+    sendMessage(chatId, "➕ لإضافة موقع جديد، أرسل البيانات بهذا التنسيق في رسالة واحدة:\n\n`/add الاسم السعر الوصف رابط_الصورة رابط_المعاينة`\n\n*(تأكد من وجود مسافة واحدة بين كل معلومة)*");
+  } else if (text == "📋 عرض وحذف المواقع") {
+    listProjectsForControl(chatId);
   } else if (text.startsWith("/add")) {
-     // استخدام نفس المنطق القديم للإضافة السريعة إذا أردت
-     processAddRequest(chatId, text);
+    processAddRequest(chatId, text);
+  } else if (text.startsWith("/edit_desc")) {
+    processEditDesc(chatId, text);
   } else {
-    sendMessage(chatId, "استخدم الأزرار أدناه للتحكم:");
     sendMainKeyboard(chatId);
   }
 }
@@ -63,38 +69,34 @@ function handleCallback(query) {
   
   if (data == "main_menu") {
     sendMainKeyboard(chatId);
-  } 
-  
-  else if (data == "list_projects") {
+  } else if (data == "list_projects") {
     listProjectsForControl(chatId);
-  } 
-  
-  else if (data == "add_project_info") {
-    sendMessage(chatId, "➕ لإضافة موقع جديد، أرسل البيانات بهذا التنسيق في رسالة واحدة:\n\n`/add الاسم السعر الوصف رابط_الصورة رابط_المعاينة`\n\n*(تأكد من وجود مسافة واحدة بين كل معلومة)*");
-  } 
-  
-  else if (data.startsWith("del_")) {
+  } else if (data.startsWith("del_")) {
     var id = data.replace("del_", "");
     deleteProjectById(chatId, id);
+  } else if (data.startsWith("pre_edit_")) {
+    var id = data.replace("pre_edit_", "");
+    sendMessage(chatId, "📝 لتعديل وصف هذا الموقع، أرسل الرسالة بالشكل التالي:\n\n`/edit_desc " + id + " الوصف الجديد هنا`\n\n*(انسخ الأمر وقم بتغيير النص فقط)*");
   }
   
-  // لإراحة المستخدم، نقوم بمسح حالة التحميل من الزر
   answerCallbackQuery(query.id);
 }
 
-// القائمة الرئيسية (Inline Keyboard)
+// القائمة الرئيسية (Reply Keyboard)
 function sendMainKeyboard(chatId) {
   var keyboard = {
-    inline_keyboard: [
-      [{ text: "➕ إضافة موقع جديد", callback_data: "add_project_info" }],
-      [{ text: "📋 عرض وحذف المواقع", callback_data: "list_projects" }],
-      [{ text: "🔄 تحديث الصفحة", callback_data: "main_menu" }]
-    ]
+    keyboard: [
+      [{ text: "🌐 عرض الموقع" }],
+      [{ text: "➕ إضافة موقع جديد" }, { text: "📋 عرض وحذف المواقع" }],
+      [{ text: "🔄 تحديث القائمة" }]
+    ],
+    resize_keyboard: true,
+    persistent: true
   };
-  sendKeyboard(chatId, "🎮 لوحة تحكم Doma Designs\nأهلاً بك! ماذا تريد أن تفعل اليوم؟", keyboard);
+  sendKeyboard(chatId, "🎮 لوحة تحكم Doma Designs\nأهلاً بك! استخدم الكيبورد أدناه للتحكم السريع:", keyboard);
 }
 
-// عرض المواقع مع أزرار الحذف
+// عرض المواقع مع أزرار التحكم
 function listProjectsForControl(chatId) {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   var data = sheet.getDataRange().getValues();
@@ -114,7 +116,10 @@ function listProjectsForControl(chatId) {
     
     var keyboard = {
       inline_keyboard: [
-        [{ text: "🗑 حذف هذا الموقع", callback_data: "del_" + id }]
+        [
+          { text: "📝 تعديل الوصف", callback_data: "pre_edit_" + id },
+          { text: "🗑 حذف", callback_data: "del_" + id }
+        ]
       ]
     };
     
@@ -127,7 +132,7 @@ function deleteProjectById(chatId, id) {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   var data = sheet.getDataRange().getValues();
   var found = false;
-  
+
   for (var i = 1; i < data.length; i++) {
     if (data[i][0] == id) {
       sheet.deleteRow(i + 1);
@@ -135,7 +140,7 @@ function deleteProjectById(chatId, id) {
       break;
     }
   }
-  
+
   if (found) {
     sendMessage(chatId, "✅ تم حذف الموقع بنجاح.");
     listProjectsForControl(chatId); // عرض القائمة المحدثة
@@ -155,6 +160,37 @@ function processAddRequest(chatId, text) {
     sheet.appendRow([id, parts[1], parts[3], parts[2], parts[4], parts[5]]);
     sendMessage(chatId, "✅ ممتاز! الموقع الآن متاح على صفحتك.");
     sendMainKeyboard(chatId);
+  }
+}
+
+// تشغيل تعديل الوصف
+function processEditDesc(chatId, text) {
+  var parts = text.split(" ");
+  if (parts.length < 3) {
+    sendMessage(chatId, "❌ خطأ! التنسيق الصحيح:\n/edit_desc ID الوصف_الجديد");
+    return;
+  }
+  
+  var id = parts[1];
+  var newDesc = text.substring(text.indexOf(parts[2])); // أخذ باقي النص كوصف
+  
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = sheet.getDataRange().getValues();
+  var found = false;
+  
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0] == id) {
+      sheet.getRange(i + 1, 3).setValue(newDesc); // الوصف في العمود الثالث (C)
+      found = true;
+      break;
+    }
+  }
+  
+  if (found) {
+    sendMessage(chatId, "✅ تم تحديث الوصف بنجاح.");
+    listProjectsForControl(chatId);
+  } else {
+    sendMessage(chatId, "❌ لم يتم العثور على هذا ID: " + id);
   }
 }
 
