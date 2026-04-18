@@ -1,9 +1,9 @@
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz30OTe6xWdGNDcOb9HjdvUJoZd3VERTabu_QGVLStv1NGjjdtyG54KT3oaF28zp--RyA/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw0i2DCpgbnIitAd-J-m5vIytz6wEXAca0GpzTMuU_7ZdgesFCBcLBlqVfXkZVWDzdMjA/exec";
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
-        return res.status(200).send('Proxy OK. Connected to latest script.');
+        return res.status(200).send('Admin System Proxy is active.');
     }
 
     try {
