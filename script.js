@@ -4,16 +4,24 @@ const SHEET_API_URL = "/api/projects";
 // رابط التليجرام الخاص بك
 const telegramBotUrl = "https://t.me/DomaDesignsbot";
 
+let lastProjectsData = ""; // لمقارنة البيانات ومنع التقطيع
+
 // عرض المواقع في الصفحة
 async function fetchAndRenderProjects() {
     const projectGrid = document.getElementById('projectGrid');
-    projectGrid.innerHTML = '<div class="loader">جاري جلب القوالب...</div>';
 
     try {
         const response = await fetch(SHEET_API_URL);
         const projects = await response.json();
-
-        projectGrid.innerHTML = ''; // مسح رسالة التحميل
+        
+        // تحويل البيانات لنص لمقارنتها بسرعة
+        const currentDataString = JSON.stringify(projects);
+        
+        // إذا لم تتغير البيانات، لا نفعل شيئاً (منع التقطيع)
+        if (currentDataString === lastProjectsData) return;
+        
+        lastProjectsData = currentDataString;
+        projectGrid.innerHTML = ''; // مسح القديم فقط عند وجود جديد
 
         if (projects.length === 0) {
             projectGrid.innerHTML = '<p>لا توجد مواقع معروضة حالياً.</p>';
@@ -39,12 +47,10 @@ async function fetchAndRenderProjects() {
             projectGrid.innerHTML += card;
         });
 
-        // تفعيل تأثيرات التمرير بعد إضافة العناصر
         initScrollReveal();
 
     } catch (error) {
         console.error("Error fetching projects:", error);
-        projectGrid.innerHTML = '<p>حدث خطأ أثناء تحميل البيانات. تأكد من اتصالك بالإنترنت.</p>';
     }
 }
 
@@ -99,4 +105,9 @@ window.onclick = function(event) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', fetchAndRenderProjects);
+// Initial Load
+document.addEventListener('DOMContentLoaded', () => {
+    fetchAndRenderProjects();
+    // تحديث فوري كل ثانية واحدة (Real-time)
+    setInterval(fetchAndRenderProjects, 1000);
+});
