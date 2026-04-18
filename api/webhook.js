@@ -1,9 +1,9 @@
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxfD8LebAMn8WCuAy-Q6lRQLYQmsihXuzCN9pTjDR9WYdfEQ94JZByAU2bFN83bSq-m/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEES8VcO3gR-HjQvkyJKAfs4OmQDcS-YXG6p9hNDME7VJeOSDhD2qltFI0NPl0KIWNzQ/exec";
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
-        return res.status(200).send('Proxy is active and connected to the latest Google Script.');
+        return res.status(200).send('Proxy OK. Bot is live and connected.');
     }
 
     try {
